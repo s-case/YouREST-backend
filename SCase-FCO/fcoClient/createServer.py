@@ -4,6 +4,9 @@ import socket
 import errno
 import argparse
 
+import sys
+sys.path.append("../")
+
 from fcoAPI.api import add_nic_to_server
 from fcoAPI.api import attach_disk
 from fcoAPI.api import attach_ssh_key
