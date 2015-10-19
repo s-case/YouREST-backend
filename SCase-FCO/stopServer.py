@@ -58,7 +58,7 @@ if __name__ == "__main__":
     parser.add_argument('customerUUID', nargs='*', help="The UUID of the Customer")
     parser.add_argument('customerUsername',  nargs=1, help="The Username of the Customer")
     parser.add_argument('customerPassword',  nargs=1, help="The password for the Customer")
-    parser.add_argument('serverUUID', nargs=1, help="The UUID of the Server to be deleted")
+    parser.add_argument('serverUUID', nargs=1, help="The UUID of the Server to be stopped")
     parser.add_argument('--verbose', dest='isVerbose', action='store_true',
                             help="Whether to print diagnostics as we go")
 
