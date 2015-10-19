@@ -1,0 +1,18 @@
+Sample commands to execute the python script.
+
+Create Server:
+python createServer.py cust_uuid cust_name cust_pwd ssh_key
+
+Delete Server:
+python deleteServer.py cust_uuid cust_name cust_pwd server_uuid
+
+Stop Server:
+python stopServer.py cust_uuid cust_name cust_pwd server_uuid
+
+
+More on arguments:
+cust_uuid (Customer UUID) can be obtained from the account on the FCO, go to My Account -> Settings -> Account Details. 
+cust_name is your login ID with which you would login to FCO
+cust_pwd is password used to login on FCO
+ssh_key is the public key. This key will be placed on to the VM, the user can connect to the VM via SSH.
+server_uuid here belongs to the server to be stopped/deleted.
