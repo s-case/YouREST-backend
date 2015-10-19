@@ -779,7 +779,6 @@ def change_server_status(auth_parms, server_uuid, state):
         print "server status changed ok, server uuid: " + server_uuid
     return server_result
 
-
 def list_servers(endpoint, username, cust_uuid, password):
     """Returns list of server objects (dictionaries).
     endpoint : API base URL.
@@ -787,7 +786,6 @@ def list_servers(endpoint, username, cust_uuid, password):
     token = getToken(endpoint, username, cust_uuid, password)
     servers = _list_servers(endpoint, token)
     return servers['list']
-
 
 def _list_servers(endpoint, token):
     listURL = endpoint + "rest/user/current/resources/server/list"
@@ -802,4 +800,52 @@ def _list_servers(endpoint, token):
         return json.loads(res.content)
     else:
         raise RuntimeError("Error - HTTP status code: " + str(res.status_code))
+
+def rest_delete_resource(auth_parms, resource_uuid, res_type):
+    attachURL = auth_parms['endpoint'] + "rest/user/current/resources/" + res_type + "/" + resource_uuid
+    cascade = { "cascade": True }
+    payload = cascade
+    print(payload)
+    payload_as_string = json.JSONEncoder().encode(payload)
+    headers = {'content-type': 'application/json'}   
+        
+    retry = True
+    count = 1
+    
+    while ((count <= MAX_NO_ATTEMPTS) and (retry == True)):
+        
+        res = requests.delete(attachURL, data=payload_as_string, auth=(auth_parms['token'], ''), headers=headers)
+        #    print(res.content)
+        print("==============================================================")
+        print(res.url)
+        print("res=" + str(res))
+        print res.content
+        # print res.status_code
+
+        # Status 202 (Accepted) is good
+        if ((res.status_code == 202) or (res.status_code == 200)):
+            print"request accepted"
+            # print("Done")
+            response = json.loads(res.content)
+            # print "response=" + str(response)
+            retry = False
+            return response
+        
+        if (res.status_code == 429):
+            print "Server busy - received 429 response, wait and retry. Attempt number: ", count 
+            time.sleep(WAIT_TIME)
+            count = count + 1
+        else:
+            print"request not accepted"
+            # Something else went wrong. Pick out the status code and message
+            response = json.loads(res.content)
+            print("HTTP response code: ", res.status_code)
+            retry = False
+            return ""  
+    
+    if ((retry == True) and (count == MAX_NO_ATTEMPTS)):
+        print "HTTP 429 ERROR, Maximum unsuccessful attempts made to send request to the server"
+        print(response['message'] + " (error code: " + response['errorCode'] + ")")
+    
+    return ""
 
