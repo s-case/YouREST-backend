@@ -779,27 +779,18 @@ def change_server_status(auth_parms, server_uuid, state):
         print "server status changed ok, server uuid: " + server_uuid
     return server_result
 
-def list_servers(endpoint, username, cust_uuid, password):
-    """Returns list of server objects (dictionaries).
-    endpoint : API base URL.
-    """
-    token = getToken(endpoint, username, cust_uuid, password)
-    servers = _list_servers(endpoint, token)
-    return servers['list']
+def list_server(auth_parms, customer_uuid):
+    sf = { "searchFilter" :
+      { "filterConditions": [{"condition": "IS_EQUAL_TO",
+                              "field": "customerUUID",
+                              "value": [customer_uuid]
+                             }
+                            ]
+      }
+    }
 
-def _list_servers(endpoint, token):
-    listURL = endpoint + "rest/user/current/resources/server/list"
-    queryLimit = {"from": 0,
-                  "to": 200,
-                  "maxRecords": 200,
-                  "loadChildren": True}
-    payload_as_string = json.JSONEncoder().encode({"queryLimit": queryLimit})
-    headers = {'content-type': 'application/json'}
-    res = requests.get(listURL, data=payload_as_string, auth=(token, ''), headers=headers)
-    if res.status_code == 200:
-        return json.loads(res.content)
-    else:
-        raise RuntimeError("Error - HTTP status code: " + str(res.status_code))
+    result_set = rest_list_resource(auth_parms, res_type="SERVER", payload=sf)
+    return result_set
 
 def rest_delete_resource(auth_parms, resource_uuid, res_type):
     attachURL = auth_parms['endpoint'] + "rest/user/current/resources/" + res_type + "/" + resource_uuid
