@@ -50,7 +50,7 @@ def StopVM(customerUUID, customerUsername, customerPassword, serverUUID, isVerbo
     auth_client = api_session(customerUsername, customerUUID, customerPassword)
     print "authentication done"
     server_state = stop_server(auth_client, serverUUID)
-    return server_state
+    print "Server status: %s" %server_state
 
 
 if __name__ == "__main__":
