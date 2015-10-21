@@ -1,5 +1,5 @@
 
-m fcoAPI.api import getToken
+from fcoAPI.api import getToken
 from fcoAPI.api import get_server_state
 from fcoAPI.api import change_server_status
 from fcoAPI.api import list_resource_by_uuid
