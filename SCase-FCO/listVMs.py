@@ -1,5 +1,5 @@
 
-m fcoAPI.api import getToken
+from fcoAPI.api import getToken
 from fcoAPI.api import list_server
 
 import argparse
