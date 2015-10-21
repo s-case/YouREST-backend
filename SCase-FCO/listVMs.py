@@ -53,5 +53,4 @@ if __name__ == "__main__":
     ret = ListVM(cmdargs.customerUUID[0],
                 cmdargs.customerUsername[0],
                 cmdargs.customerPassword[0],
-                cmdargs.serverUUID[0],
                 isVerbose)
