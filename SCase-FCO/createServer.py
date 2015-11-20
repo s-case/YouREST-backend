@@ -24,7 +24,7 @@ from fcoAPI.api import wait_for_install
 from fcoAPI.api import wait_for_job
 from fcoAPI.api import wait_for_resource
 
-IMAGE_UUID = "ba6167ec-8257-36d3-8b77-0a64846ffd19"
+IMAGE_UUID = "f8ff263c-a457-3e93-9a17-179b4942c857"
 ENDPOINT = "https://cp.sd1.flexiant.net:4442/" 
 NETWORKTYPE = "IP"
 DEFAULT_EXTRA_DISK_SIZE = "20"
