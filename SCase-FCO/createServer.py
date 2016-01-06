@@ -3,34 +3,37 @@ import time
 import socket
 import errno
 import argparse
+import subprocess
 
-from fcoAPI.api import add_nic_to_server
-from fcoAPI.api import attach_disk
-from fcoAPI.api import attach_ssh_key
-from fcoAPI.api import change_server_status
-from fcoAPI.api import create_nic
-from fcoAPI.api import create_sshkey
-from fcoAPI.api import create_vdc
-from fcoAPI.api import getToken
-from fcoAPI.api import get_first_vdc_in_cluster
-from fcoAPI.api import get_prod_offer_uuid
-from fcoAPI.api import get_server_state
-from fcoAPI.api import list_image
-from fcoAPI.api import list_resource_by_uuid
-from fcoAPI.api import list_sshkeys
-from fcoAPI.api import rest_create_disk
-from fcoAPI.api import rest_create_server
-from fcoAPI.api import wait_for_install
-from fcoAPI.api import wait_for_job
-from fcoAPI.api import wait_for_resource
+import sys
+sys.path.append("../")
 
-IMAGE_UUID = "f8ff263c-a457-3e93-9a17-179b4942c857"
+from api import add_nic_to_server
+from api import attach_disk
+from api import attach_ssh_key
+from api import change_server_status
+from api import create_nic
+from api import create_sshkey
+from api import create_vdc
+from api import getToken
+from api import get_first_vdc_in_cluster
+from api import get_prod_offer_uuid
+from api import get_server_state
+from api import list_image
+from api import list_resource_by_uuid
+from api import list_sshkeys
+from api import rest_create_disk
+from api import rest_create_server
+from api import wait_for_install
+from api import wait_for_job
+from api import wait_for_resource
+
+IMAGE_UUID = "e682f044-c919-329f-b07a-b9b245406b50"
 ENDPOINT = "https://cp.sd1.flexiant.net:4442/" 
 NETWORKTYPE = "IP"
 DEFAULT_EXTRA_DISK_SIZE = "20"
 DEFAULT_RAM_SIZE = 512
 DEFAULT_CPU_COUNT = 1
-DEFAULT_SERVER_NAME = "SCase-Node"
 CONTEXTSCRIPT = ""
     
 # Method to create a VDC for the customer
@@ -203,11 +206,16 @@ def start_server(auth_parms, server_data):
     server_data.append(server_ip)
     return server_data
 
+# Method to add the remote to the local repo of the user
+def add_remote_git(ip, local_repo_dir):
+    url = "ssh://" + ip + "/webservice.git"
+    print ("Adding remote git: " + url + " to the local repo: " + local_repo_dir)
+    subprocess.check_call(["git", "remote", "add", "origin", url], cwd = local_repo_dir)
+
 # Method that puts together all the methods required to create a VM
-def MakeVM(customerUUID, customerUsername, customerPassword, publicKey, isVerbose):
+def MakeVM(customerUUID, customerUsername, customerPassword, publicKey, vmName, localRepoDir, isVerbose):
  
-    ramAmount = DEFAULT_RAM_SIZE 
-    vmName = DEFAULT_SERVER_NAME
+    ramAmount = DEFAULT_RAM_SIZE
     cpuCount = DEFAULT_CPU_COUNT
     diskSize = DEFAULT_EXTRA_DISK_SIZE
     
@@ -300,6 +308,8 @@ def MakeVM(customerUUID, customerUsername, customerPassword, publicKey, isVerbos
              login=server_data[2]
             )
 
+    add_remote_git(server_data[3], localRepoDir)
+    
     print ret
 
 if __name__ == "__main__":
@@ -307,7 +317,9 @@ if __name__ == "__main__":
     parser.add_argument('customerUUID', nargs='*', help="The UUID of the Customer")
     parser.add_argument('customerUsername',  nargs=1, help="The Username of the Customer")
     parser.add_argument('customerPassword',  nargs=1, help="The password for the Customer")
-    parser.add_argument('publicKey',nargs=1, help="SSH public key")
+    parser.add_argument('publicKey', nargs=1, help="SSH public key")
+    parser.add_argument('serverName', nargs=1, help="Server name")
+    parser.add_argument('localRepoDir', nargs=1, help="The local repository where the code generated has been committed")
     parser.add_argument('--verbose', dest='isVerbose', action='store_true',
                             help="Whether to print diagnostics as we go")
     
@@ -327,6 +339,8 @@ if __name__ == "__main__":
                 cmdargs.customerUsername[0],
                 cmdargs.customerPassword[0],
                 cmdargs.publicKey[0],
+                cmdargs.serverName[0],
+                cmdargs.localRepoDir[0],
                 isVerbose)
     
     
