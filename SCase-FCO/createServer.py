@@ -5,28 +5,25 @@ import errno
 import argparse
 import subprocess
 
-import sys
-sys.path.append("../")
-
-from api import add_nic_to_server
-from api import attach_disk
-from api import attach_ssh_key
-from api import change_server_status
-from api import create_nic
-from api import create_sshkey
-from api import create_vdc
-from api import getToken
-from api import get_first_vdc_in_cluster
-from api import get_prod_offer_uuid
-from api import get_server_state
-from api import list_image
-from api import list_resource_by_uuid
-from api import list_sshkeys
-from api import rest_create_disk
-from api import rest_create_server
-from api import wait_for_install
-from api import wait_for_job
-from api import wait_for_resource
+from fcoAPI.api import add_nic_to_server
+from fcoAPI.api import attach_disk
+from fcoAPI.api import attach_ssh_key
+from fcoAPI.api import change_server_status
+from fcoAPI.api import create_nic
+from fcoAPI.api import create_sshkey
+from fcoAPI.api import create_vdc
+from fcoAPI.api import getToken
+from fcoAPI.api import get_first_vdc_in_cluster
+from fcoAPI.api import get_prod_offer_uuid
+from fcoAPI.api import get_server_state
+from fcoAPI.api import list_image
+from fcoAPI.api import list_resource_by_uuid
+from fcoAPI.api import list_sshkeys
+from fcoAPI.api import rest_create_disk
+from fcoAPI.api import rest_create_server
+from fcoAPI.api import wait_for_install
+from fcoAPI.api import wait_for_job
+from fcoAPI.api import wait_for_resource
 
 IMAGE_UUID = "e682f044-c919-329f-b07a-b9b245406b50"
 ENDPOINT = "https://cp.sd1.flexiant.net:4442/" 
