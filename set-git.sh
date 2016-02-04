@@ -26,7 +26,6 @@ PASSWD=\$(pwgen 8 1)
 bash_content=\$(sudo cat /home/ubuntu/.bashrc)
 echo -en "export PASSWD=\$PASSWD\n$content" >/home/ubuntu/.bashrc
 source ~/.bashrc
-echo \$PASSWD 
 #sudo -u postgres psql --command '\\password \$PASSWD'
 sudo -u postgres psql -c "ALTER USER postgres WITH PASSWORD '\$PASSWD';"
 echo
