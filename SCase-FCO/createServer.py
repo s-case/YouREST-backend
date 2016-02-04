@@ -205,7 +205,7 @@ def start_server(auth_parms, server_data):
 
 # Method to add the remote to the local repo of the user
 def add_remote_git(ip, local_repo_dir):
-    url = "ssh://" + ip + "/webservice.git"
+    url = "ssh://" + ip + "/home/ubuntu/YouREST.git"
     print ("Adding remote git: " + url + " to the local repo: " + local_repo_dir)
     subprocess.check_call(["git", "remote", "add", "origin", url], cwd = local_repo_dir)
 
